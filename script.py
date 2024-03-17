@@ -27,8 +27,8 @@ def scrape_data_point():
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
         # Use CSS selector to find the #1 most read article
-        target_element = soup.select_one("#mostRead > div:nth-child(1) > div:nth-child(2) > a")
-        data_point = "" if target_element is None else target_element.text
+        target_elements = soup.select("#mostRead .frontpage-link.standard-link")
+        data_point = "" if target_elements is None else target_elements[0].text
         loguru.logger.info(f"Data point: {data_point}")
         return data_point
 
