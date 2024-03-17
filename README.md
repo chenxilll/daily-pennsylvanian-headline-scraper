@@ -1,3 +1,6 @@
+**This repository modifies the [`basic-git-scraper-template`](https://github.com/jlumbroso/basic-git-scraper-template/tree/main) to scrape the #1 most-read article from [The Daily Pennsylvanian homepage](https://www.thedp.com/).**
+
+
 # Basic Git Scraper Template
 
 This template provides a starting point for **git scraping**—the technique of scraping data from websites and automatically committing it to a Git repository using workflows, [coined by Simon Willison](https://simonwillison.net/2020/Oct/9/git-scraping/).
@@ -39,6 +42,7 @@ The main libraries used are:
 - [`loguru`](https://github.com/Delgan/loguru) - Logging errors and run info
 - [`pytz`](https://github.com/stub42/pytz) - Handling datetimes and timezones  
 - [`waybackpy`](https://github.com/akamhy/waybackpy/) - Scraping web archives (optional)
+- [`re`](https://docs.python.org/3/library/re.html) - Support for regular expressions in Python (added)
 
 ## Getting Started
 
@@ -135,3 +139,11 @@ But it is important to use it responsibly and ethically. Here are some guideline
 9. Document your scraping process thoroughly for replicability, transparency and accountability.
 
 10. Continuously re-evaluate your scraping program against applicable laws and ethical principles.
+
+## Modifications to the Scraper
+
+The `scrape_data_point()` function has been modified to scrape the title of the most-read article from The [Daily Pennsylvanian homepage](https://www.thedp.com/). Since the "Most Read" list is dynamically loaded by a JavaScript function, `scrape_data_point()` first requests and parses the homepage to locate the API URL. It then requests data from this API and extracts the title of the most-read article from the response.
+
+This process is conducted daily to analyze and understand which articles attract the most interest. This insight helps in writing articles that better meet the audience's needs.
+
+
