@@ -12,6 +12,7 @@ import bs4
 import requests
 import loguru
 
+import re
 
 def scrape_data_point():
     """
@@ -26,12 +27,26 @@ def scrape_data_point():
 
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        # Use CSS selector to find the #1 most read article
-        target_elements = soup.select("#mostRead .frontpage-link.standard-link")
-        data_point = "" if target_elements is None else target_elements[0].text
-        loguru.logger.info(f"Data point: {data_point}")
-        return data_point
+        target_element = soup.select_one("#content > div:nth-child(5) > script")
 
+        api_url = re.search(r"https://[^'\"}]+", target_element.text)
+
+        if api_url:
+            api_url = api_url.group(0)
+        
+            req2 = requests.get(api_url)
+            loguru.logger.info(f"Request URL: {req2.url}")
+            loguru.logger.info(f"Request status code: {req2.status_code}")
+
+            if req2.ok:
+                data = req2.json()
+                result = data.get("result", [])
+                data_point = ""
+                if result:
+                    data_point = result[0].get("ogTitle", "")
+                    loguru.logger.info(f"Data point: {data_point}")
+                return data_point
+    return ""
 
 if __name__ == "__main__":
 
